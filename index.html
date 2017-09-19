@@ -1,0 +1,272 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Service meshes and the path to heterogeneous microservices</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-background-image="images/mesh.jpg" data-background-repeat="repeat">
+					<h1 style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">Service meshes and the path to heterogeneous microservices</h1>
+					<p style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+						<small>
+							<a href="http://mauricio.github.io/">Maurício Linhares</a> /
+							<a href="http://twitter.com/mauriciojr">@mauriciojr</a> /
+							<span style="text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">Software Engineer at DigitalOcean</span>
+						</small>
+					</p>
+				</section>
+
+				<section>
+					<h1>Are we in microservices buzzword bingo?</h1>
+					<p>Not quite, but be careful</p>
+				</section>
+
+				<section>
+					<h1>What's one of our biggest problems in microservices?</h1>
+				</section>
+
+				<section>
+					<h1>Surviving unreliable networks</h1>
+					<p>Every. Single. One. Of. Them.</p>
+				</section>
+
+				<section>
+					<h1>First wave</h1>
+					<ul>
+						<li>
+							Twitter's Finagle
+						</li>
+						<li>
+							Netflix's Hystrix
+						</li>
+						<li>
+							Your own homegrown, organic, free range and gluten free internal library
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Library based support</h1>
+					<ul>
+						<li>Load balancing</li>
+						<li>Tracing</li>
+						<li>Metrics</li>
+						<li>Service discovery</li>
+						<li>Rate limiting</li>
+						<li>Dynamic routing</li>
+						<li>Traffic shifting</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>And this is good...</h1>
+					<p>...until this happens</p>
+				</section>
+
+				<section>
+					<p>
+						<img src="images/ruby-gopher.jpeg">
+					</p>
+				</section>
+
+				<section>
+					<h1>Platform hell</h1>
+					<ul>
+						<li>
+							Equivalent libraries might just not exist
+						</li>
+						<li>
+							They exist but have different or incompatible feature sets
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Options?</h1>
+					<ul>
+						<li>Build a compatible library from scratch</li>
+						<li>Build layers on top of existing stuff to make it compatible</li>
+						<li>Pretend there's nothing wrong and run new apps without any of it</li>
+						<li>Never build stuff in different platforms/languages</li>
+					</ul>
+				</section>
+
+				<section>
+					<p><img src="images/facepalm.png"></p>
+					<h1>Nope</h1>
+				</section>
+
+				<section>
+					<h1>We need something that is platform independent</h1>
+					<p>And will easily run in today's container based solutions</p>
+				</section>
+				
+				<section>
+					<h1>Mesh in action</h1>
+					<p>
+						<img src="images/service-mesh.png">
+					</p>
+				</section>
+
+				<section>
+					<h1>What's a sidecar?</h1>
+					<p>
+						<img src="images/sidecar.jpg">
+					</p>
+				</section>
+
+				<section>
+					<h1>A container that provides a service to your app</h1>
+					<p>Most of the time sidecar and main apps talk over the network</p>
+				</section>
+
+				<section>
+					<h1>Back!</h1>
+					<p>
+						<img src="images/service-mesh.png">
+					</p>
+				</section>
+
+				<section>
+					<h1>All traffic flows through the mesh container</h1>
+					<p>And it applies all rules/filters that are configured</p>
+				</section>
+
+				<section>
+					<h1>Platform independent solution</h1>
+					<p>
+						Your app doesn't even know it's talking to the mesh container
+					</p>
+				</section>
+
+				<section>
+					<h1>Dynamic configuration</h1>
+					<p>
+						Solutions offer APIs to manage configuration changes without restarts
+						or manually updating files
+					</p>
+				</section>
+
+				<section>
+					<h1>Deep visibility into L7 traffic</h1>
+					<p>Provide visibility and features even for legacy or apps you don't
+					own or can't update</p>
+				</section>
+
+				<section>
+					<h1>Gotchas?</h1>
+					<ul>
+						<li>Mesh must support your application protocol</li>
+						<li>Optimized for containerized environments</li>
+						<li>Another moving piece for your infrastructure</li>
+						<li>Still requires some configuration management for service discovery</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>When should we use it?</h1>
+					<p>Whenever you need the features listed before</p>
+				</section>
+
+				<section>
+					<h1>Or...</h1>
+					<ul>
+						<li>Request shadowing</li>
+						<li>Zone local load balancing</li>
+						<li>TLS termination</li>
+						<li>Protocol upgrading</li>
+						<li>Fault injection</li>
+						<li>...</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Buzzword-worthy</h1>
+					<p>Lots of buzzwords but it gets the job done</p>
+				</section>
+
+				<section>
+					<h1>Contenders</h1>
+					<ul>
+						<li>Lyft's Envoy - <a href="https://envoyproxy.github.io/">https://envoyproxy.github.io/</a> </li>
+						<li>Linkerd - <a href="https://linkerd.io/">https://linkerd.io/</a> </li>
+						<li>istio - <a href="https://istio.io/">https://istio.io/</a> (uses Envoy, kubernetes only for now)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>How do we compare them to nginx and haproxy?</h1>
+					<ul>
+						<li>No complex load balancing solutions (unless using nginx plus or extensions)</li>
+						<li>Pluggable architecture (not available in haproxy)</li>
+						<li>Integration with external service discovery and limiting services</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>How do we compare them to nginx and haproxy?</h1>
+					<ul>
+						<li>Hot reloading</li>
+						<li>Open tracing support</li>
+						<li>Better statistics</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>What's up at DigitalOcean?</h1>
+					<ul>
+						<li>Moving our front proxies out of haproxy and nginx to Envoy</li>
+						<li>Preparing to setup Envoy to manage communication between services</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
+				</section>
+
+				<section>
+					<h1>Thanks!</h1>
+					<p>DigitalOcean is hiring, check <a href="https://www.digitalocean.com/company/careers/">https://www.digitalocean.com/company/careers/</a> </p>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
